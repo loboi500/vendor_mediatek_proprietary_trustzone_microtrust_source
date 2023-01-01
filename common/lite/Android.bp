@@ -1,0 +1,8 @@
+subdirs = [
+    "gatekeeper",
+    "km4.1",
+    "kmsetkey",
+    "libtrusty",
+    "storage",
+    "storage/interface"
+]

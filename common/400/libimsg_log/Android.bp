@@ -1,0 +1,23 @@
+/***************************************************************************
+  Copyright (c) 2020-2021 MICROTRUST Incorporated
+  All rights reserved
+
+  This file and software is confidential and proprietary to MICROTRUST Inc.
+  Unauthorized copying of this file and software is strictly prohibited.
+  You MUST NOT disclose this file and software unless you get a license
+  agreement from MICROTRUST Incorporated.
+***************************************************************************/
+
+cc_library_shared {
+    name: "libimsg_log",
+    srcs: ["imsg_log.c"],
+    shared_libs: [
+        "liblog",
+    ],
+    export_include_dirs: ["include"],
+    cflags: ["-Werror"],
+    owner: "mtk",
+
+    proprietary: true,
+}
+

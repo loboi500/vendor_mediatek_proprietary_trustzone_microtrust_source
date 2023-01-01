@@ -1,0 +1,87 @@
+/*
+ Copyright (c) 2020-2021 MICROTRUST Incorporated
+ All rights reserved
+
+ This file and software is confidential and proprietary to MICROTRUST Inc.
+ Unauthorized copying of this file and software is strictly prohibited.
+ You MUST NOT disclose this file and software unless you get a license
+ agreement from MICROTRUST Incorporated.
+*/
+
+/// add start
+bootstrap_go_package {
+    // name and pkgPath need to  according to your module
+    name: "soong-teei_damon",
+    pkgPath: "android/soong/teei_damon",
+    deps: [
+        "blueprint",
+        "blueprint-pathtools",
+        "soong",
+        "soong-android",
+        "soong-cc",
+        "soong-genrule",
+    ],
+    srcs: [
+          // include new add .go file
+          "teei_daemon.go",
+    ],
+    pluginFor: ["soong_build"],
+}
+
+microtrust_teei_daemon_defaults {
+    name: "microtrust_teei_daemon_defaults",
+}
+
+cc_prebuilt_library_shared {
+    name: "libteei_daemon_vfs",
+
+    proprietary: true,
+
+    owner: "mtk",
+
+    strip: {
+        none:true,
+    },
+
+    arch: {
+        arm: {
+            srcs: ["armeabi-v7a/libteei_daemon_vfs.so"],
+        },
+        arm64: {
+            srcs: ["arm64-v8a/libteei_daemon_vfs.so"],
+        }
+    },
+
+    compile_multilib: "both",
+
+    shared_libs: ["libc", "libcutils", "libdl", "libm"],
+
+    allow_undefined_symbols: true,
+}
+
+cc_binary {
+    name: "teei_daemon",
+    vendor: true,
+
+    init_rc: ["microtrust.rc"],
+
+    srcs: ["main.c"],
+
+    shared_libs: [
+        "libcutils",
+        "liblog",
+	"libteei_daemon_vfs",
+    ],
+
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DPRO_NODE=\"/dev/block/platform/bootdevice/by-name/proinfo\"",
+        "-DSYSTEM_THH_PATH=\"/vendor/thh/\"",
+    ],
+
+    defaults: [
+        "microtrust_teei_daemon_defaults",
+    ],
+}

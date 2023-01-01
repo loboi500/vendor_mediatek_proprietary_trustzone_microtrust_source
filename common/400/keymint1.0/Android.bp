@@ -1,0 +1,75 @@
+/****************************************************************************
+ Copyright (c) 2020-2021 MICROTRUST Incorporated
+ All rights reserved
+
+ This file and software is confidential and proprietary to MICROTRUST Inc.
+ Unauthorized copying of this file and software is strictly prohibited.
+ You MUST NOT disclose this file and software unless you get a license
+ agreement from MICROTRUST Incorporated.
+****************************************************************************/
+
+cc_binary {
+
+	name: "android.hardware.security.keymint@1.0-service.beanpod",
+
+	relative_install_path: "hw",
+
+	init_rc: ["android.hardware.security.keymint-service.beanpod.rc"],
+
+	vintf_fragments: [
+		"android.hardware.security.keymint-service.beanpod.xml",
+		"android.hardware.security.sharedsecret-service.beanpod.xml",
+		"android.hardware.security.secureclock-service.beanpod.xml",
+	],
+
+	vendor: true,
+
+	static_libs: [
+		"libkeymint_remote_prov_support",
+	],
+
+	shared_libs: [
+		"libhidlbase",
+		"android.hardware.security.keymint-V1-ndk_platform",
+		"android.hardware.security.sharedsecret-V1-ndk_platform",
+		"android.hardware.security.secureclock-V1-ndk_platform",
+	"lib_android_keymaster_keymint_utils",
+		"libbase",
+		"libbinder_ndk",
+		"libcrypto",
+		"libkeymaster_messages",
+		"libkeymaster_portable",
+		"libkeymint",
+		"liblog",
+		"libutils",
+		"libcutils",
+		"libcppbor_external",
+		"libcppcose_rkp",
+		"libTEECommon",
+	],
+
+	srcs: [
+		"common/beanpod_keymaster_ipc.cpp",
+		"common/BeanpodKeymaster.cpp",
+		"BeanpodKeyMintDevice.cpp",
+		"BeanpodKeyMintOperation.cpp",
+		"BeanpodSecureClock.cpp",
+		"BeanpodSharedSecret.cpp",
+		"BeanpodRemotelyProvisionedComponent.cpp",
+		"service.cpp",
+	],
+
+	proprietary: true,
+
+	owner: "mtk",
+
+	local_include_dirs: [
+		"include",
+		"common/include",
+	],
+
+	required: [
+		//"RemoteProvisioner",
+		"android.hardware.hardware_keystore.xml",
+	],
+}
